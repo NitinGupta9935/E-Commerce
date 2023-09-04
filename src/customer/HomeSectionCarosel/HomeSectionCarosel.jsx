@@ -4,7 +4,7 @@ import AliceCarousel from "react-alice-carousel";
 import { Button } from "@mui/material";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
-const HomeSectionCarosel = () => {
+const HomeSectionCarosel = ({ data, sectionName }) => {
     const [activeIndex, setActiveIndex] = useState(0);
 
   const responsive = {
@@ -18,17 +18,19 @@ const HomeSectionCarosel = () => {
 
   const syncActiveIndex = ({item}) => setActiveIndex(item); 
 
-  const items = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item) => <HomeSectionCard />);
+  const items = data.slice(0, 10).map((item) => <HomeSectionCard product={item} />);
 
   return (
-    <div className="border ">
+    <div className="border">
+      <h2 className="text-2xl font-extrabold text-gray-800 py-5">{sectionName}</h2>
       <div className="relative p-5">
         <AliceCarousel
           items={items}
           disableButtonsControls
-          infinite
           responsive={responsive}
           disableDotsControls
+          onSlideChanged={syncActiveIndex}
+          activeIndex={activeIndex}
         />
         {activeIndex !== items.length - 5 && <Button
           variant="contained"
@@ -41,20 +43,20 @@ const HomeSectionCarosel = () => {
             transform: "translateX(50%) rotate(90deg)",
             bgcolor: "white",
           }}
-          aria-label="next"
-        >
+          aria-label="next" 
+          >
           <KeyboardArrowLeftIcon
             sx={{ transform: "rotate(90deg)", color: "black" }}
           />
         </Button>}
 
-        <Button
+        {activeIndex !== 0 && <Button
           variant="contained"
           className="z-50 bg-white"
           onClick={slidePrev}
           sx={{
             position: "absolute",
-            top: "8rem",
+            top: "8rem", 
             left: "0rem",
             transform: "translateX(-50%) rotate(-90deg)",
             bgcolor: "white",
@@ -65,6 +67,7 @@ const HomeSectionCarosel = () => {
             sx={{ transform: "rotate(90deg)", color: "black" }}
           />
         </Button>
+        }
       </div>
     </div>
   );
